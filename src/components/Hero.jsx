@@ -71,6 +71,25 @@ one organized view.
         </Row>
       </Container>
     </section>
+     <section className="hero-section py-5 bg-light">
+      <Container>
+        <Row className="align-items-center">
+          <Col md={6}>
+            <h5 className="display-6 fw-bold mb-3 text-blue">Task-Whiz</h5>
+            <p className="lead mb-4 text-secondary">
+              Simplify Your Workday with Smart Task Management.<br />
+              Plan, organize, and execute tasks effortlessly with our intuitive tools—
+              set priorities, track progress, and meet deadlines seamlessly.
+            </p>
+           
+          </Col>
+          <Col md={6}>
+            <img src="/images/image4.png" alt="Teamwork" className="img-fluid" />
+          </Col>
+        </Row>
+      </Container>
+    </section>
+
     
 
     {/* 2. Features Section */}

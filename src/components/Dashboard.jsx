@@ -1,184 +1,144 @@
-import React, { useState } from 'react';
-import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-const Dashboard = () => {
-  const [tasks, setTasks] = useState([
-    { id: 1, title: 'Finish React project', status: 'In Progress' },
-    { id: 2, title: 'Prepare presentation', status: 'Pending' },
-    { id: 3, title: 'Team meeting at 3 PM', status: 'Completed' },
-  ]);
 
-  const [newTask, setNewTask] = useState('');
-  const [editingTask, setEditingTask] = useState(null);
-  const [editTitle, setEditTitle] = useState('');
-  const [filter, setFilter] = useState('All');
+function Dashboard({ tasks, setTasks }) {
+  const [newTask, setNewTask] = useState("");
+  const [activeTab, setActiveTab] = useState("summary");
+  const navigate = useNavigate();
 
-  // ➕ Add Task
-  const addTask = () => {
-    if (newTask.trim() !== '') {
-      setTasks([...tasks, { id: Date.now(), title: newTask, status: 'Pending' }]);
-      setNewTask('');
-    }
+  const handleAddTask = (e) => {
+    e.preventDefault();
+    if (!newTask.trim()) return;
+    setTasks([...tasks, { id: Date.now(), title: newTask, status: "pending" }]);
+    setNewTask("");
+    setActiveTab("pending");
   };
 
-  // 🗑️ Delete Task
-  const deleteTask = (id) => {
-    setTasks(tasks.filter(task => task.id !== id));
+  const markCompleted = (id) => {
+    setTasks(tasks.map(t => t.id === id ? { ...t, status: "completed" } : t));
   };
 
-  // ✏️ Start Editing
-  const startEdit = (task) => {
-    setEditingTask(task.id);
-    setEditTitle(task.title);
-  };
-
-  // 💾 Save Edit
-  const saveEdit = (id) => {
-    setTasks(tasks.map(task =>
-      task.id === id ? { ...task, title: editTitle } : task
-    ));
-    setEditingTask(null);
-    setEditTitle('');
-  };
-
-  // ✅ Mark Complete
-  const markComplete = (id) => {
-    setTasks(tasks.map(task =>
-      task.id === id ? { ...task, status: 'Completed' } : task
-    ));
-  };
-
-  // 🔍 Filtered Tasks
-  const filteredTasks = tasks.filter(task =>
-    filter === 'All' ? true : task.status === filter
-  );
+  const completedTasks = tasks.filter(t => t.status === "completed");
+  const pendingTasks = tasks.filter(t => t.status === "pending");
 
   return (
-    <section className="py-5 bg-white">
-      <Container>
-        <Row className="mb-4">
-          <Col>
-            <h2 className="fw-bold text-primary">Dashboard</h2>
-            <p className="text-secondary">Manage your tasks efficiently.</p>
-          </Col>
-        </Row>
+    <div className="dashboard-container d-flex">
+      {/* Sidebar */}
+      <div className="sidebar p-3 d-flex flex-column justify-content-between">
+        <div>
+          <h4 className="mb-4">📌 Task Manager</h4>
+          <ul className="nav flex-column">
+            <li><button className={`nav-link ${activeTab==="summary"?"active":""}`} onClick={()=>setActiveTab("summary")}>📊 Dashboard</button></li>
+            <li><button className={`nav-link ${activeTab==="completed"?"active":""}`} onClick={()=>setActiveTab("completed")}>✅ Completed Tasks</button></li>
+            <li><button className={`nav-link ${activeTab==="pending"?"active":""}`} onClick={()=>setActiveTab("pending")}>⏳ Pending Tasks</button></li>
+            <li><button className={`nav-link ${activeTab==="add"?"active":""}`} onClick={()=>setActiveTab("add")}>➕ Add New Task</button></li>
+            <li><button className={`nav-link ${activeTab==="status"?"active":""}`} onClick={()=>setActiveTab("status")}>📌 Task Status</button></li>
+          </ul>
+        </div>
 
-        {/* Add Task Input */}
-        <Row className="mb-4">
-          <Col md={8}>
-            <Form.Control
-              type="text"
-              placeholder="Enter new task"
-              value={newTask}
-              onChange={(e) => setNewTask(e.target.value)}
-              className="mb-2"
-            />
-          </Col>
-          <Col md={4}>
-            <Button variant="success" onClick={addTask}>Add Task</Button>
-          </Col>
-        </Row>
+        {/* Bottom buttons */}
+        <div className="sidebar-bottom">
+          <button className={`nav-link ${activeTab==="login"?"active":""}`} onClick={()=>setActiveTab("login")}>🔑 Login</button>
+          <button className={`nav-link ${activeTab==="signup"?"active":""}`} onClick={()=>setActiveTab("signup")}>📝 Sign Up</button>
+          <button className="nav-link back-home" onClick={() => navigate("/")}>⬅️ Back to Home</button>
+        </div>
+      </div>
 
-        {/* Filter Bar */}
-        <Row className="mb-4">
-          <Col>
-            <div className="d-flex gap-2">
-              <Button
-                variant={filter === 'All' ? 'primary' : 'outline-primary'}
-                onClick={() => setFilter('All')}
-              >
-                All
-              </Button>
-              <Button
-                variant={filter === 'Pending' ? 'primary' : 'outline-primary'}
-                onClick={() => setFilter('Pending')}
-              >
-                Pending
-              </Button>
-              <Button
-                variant={filter === 'In Progress' ? 'primary' : 'outline-primary'}
-                onClick={() => setFilter('In Progress')}
-              >
-                In Progress
-              </Button>
-              <Button
-                variant={filter === 'Completed' ? 'primary' : 'outline-primary'}
-                onClick={() => setFilter('Completed')}
-              >
-                Completed
-              </Button>
+      {/* Main Content */}
+      <div className="content flex-grow-1 p-4">
+        {activeTab === "summary" && (
+          <>
+            <h2 className="dashboard-title">📊 Task Dashboard</h2>
+            <div className="row text-center">
+              <div className="col-md-3 dashboard-card">Completed: {completedTasks.length}</div>
+              <div className="col-md-3 dashboard-card">Pending: {pendingTasks.length}</div>
+              <div className="col-md-3 dashboard-card">Total: {tasks.length}</div>
+              <div className="col-md-3 dashboard-card">
+                Status: {completedTasks.length === tasks.length ? "All Done 🎉" : "In Progress"}
+              </div>
             </div>
-          </Col>
-        </Row>
+          </>
+        )}
 
-        {/* Task Cards */}
-        <Row>
-          {filteredTasks.map(task => (
-            <Col md={4} key={task.id} className="mb-3">
-              <Card className="shadow-sm">
-                <Card.Body>
-                  {editingTask === task.id ? (
-                    <>
-                      <Form.Control
-                        type="text"
-                        value={editTitle}
-                        onChange={(e) => setEditTitle(e.target.value)}
-                        className="mb-2"
-                      />
-                      <Button
-                        variant="primary"
-                        size="sm"
-                        className="me-2"
-                        onClick={() => saveEdit(task.id)}
-                      >
-                        Save
-                      </Button>
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => setEditingTask(null)}
-                      >
-                        Cancel
-                      </Button>
-                    </>
-                  ) : (
-                    <>
-                      <Card.Title>{task.title}</Card.Title>
-                      <Card.Text>Status: {task.status}</Card.Text>
-                      <Button
-                        variant="warning"
-                        size="sm"
-                        className="me-2"
-                        onClick={() => startEdit(task)}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        variant="success"
-                        size="sm"
-                        className="me-2"
-                        onClick={() => markComplete(task.id)}
-                        disabled={task.status === 'Completed'}
-                      >
-                        Complete
-                      </Button>
-                      <Button
-                        variant="danger"
-                        size="sm"
-                        onClick={() => deleteTask(task.id)}
-                      >
-                        Delete
-                      </Button>
-                    </>
-                  )}
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      </Container>
-    </section>
+        {activeTab === "completed" && (
+          <>
+            <h2 className="dashboard-title">✅ Completed Tasks</h2>
+            <ul className="list-group task-list">
+              {completedTasks.map(t => <li key={t.id} className="list-group-item completed">{t.title}</li>)}
+            </ul>
+          </>
+        )}
+
+        {activeTab === "pending" && (
+          <>
+            <h2 className="dashboard-title">⏳ Pending Tasks</h2>
+            <ul className="list-group task-list">
+              {pendingTasks.map(t => (
+                <li key={t.id} className="list-group-item d-flex justify-content-between pending">
+                  {t.title}
+                  <button className="btn btn-sm btn-success" onClick={()=>markCompleted(t.id)}>Mark Completed</button>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+
+        {activeTab === "add" && (
+          <>
+            <h2 className="dashboard-title">➕ Add New Task</h2>
+            <form onSubmit={handleAddTask} className="add-task-form">
+              <div className="mb-3">
+                <label className="form-label">Task Title</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter new task..."
+                  value={newTask}
+                  onChange={(e)=>setNewTask(e.target.value)}
+                />
+              </div>
+              <button className="btn btn-primary w-100">Add Task</button>
+            </form>
+          </>
+        )}
+
+        {activeTab === "status" && (
+          <>
+            <h2 className="dashboard-title">📌 Task Status</h2>
+            <p>✅ Completed: {completedTasks.length}</p>
+            <p>⏳ Pending: {pendingTasks.length}</p>
+            <p>📊 Total: {tasks.length}</p>
+            <p>Status: {completedTasks.length === tasks.length ? "All Done 🎉" : "In Progress"}</p>
+          </>
+        )}
+
+        {activeTab === "login" && (
+          <>
+            <h2 className="dashboard-title">🔑 Login</h2>
+            <form className="auth-form">
+              <input type="text" className="form-control mb-2" placeholder="Username" />
+              <input type="password" className="form-control mb-2" placeholder="Password" />
+              <button className="btn btn-primary w-100">Login</button>
+            </form>
+          </>
+        )}
+
+        {activeTab === "signup" && (
+          <>
+            <h2 className="dashboard-title">📝 Sign Up</h2>
+            <form className="auth-form">
+              <input type="text" className="form-control mb-2" placeholder="Username" />
+              <input type="email" className="form-control mb-2" placeholder="Email" />
+              <input type="password" className="form-control mb-2" placeholder="Password" />
+              <button className="btn btn-success w-100">Sign Up</button>
+            </form>
+          </>
+        )}
+      </div>
+    </div>
   );
-};
+}
 
 export default Dashboard;

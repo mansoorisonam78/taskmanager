@@ -1,3 +1,25 @@
+
+/* Import font */
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+
+/* Light blue background */
+.navbar-custom {
+  background-color: #e6f2ff; /* soft light blue */
+}
+
+/* Stylish logo font */
+.logo-font {
+  font-family: 'Pacifico', cursive;
+  font-size: 1.6rem;
+  color: #004080;
+}
+
+/* Center nav links spacing */
+.navbar-nav .nav-link {
+  margin: 0 12px;
+  font-weight: 500;
+}
 /* 🌐 Global Styles */
 body {
   margin: 0;
@@ -48,25 +70,7 @@ p {
   border-color: #004085;
 }
 
-/* 🧭 Navbar */
-.navbar {
-  background-color: #ffffff !important;
-}
 
-.navbar-brand {
-  font-weight: bold;
-  font-size: 1.5rem;
-  color: #4da6ff !important;
-}
-
-.nav-link {
-  color: #212529 !important;
-  font-weight: 500;
-}
-
-.nav-link:hover {
-  color: #4da6ff !important;
-}
 
 /* 🎯 Hero Section */
 .hero-section {
@@ -113,25 +117,104 @@ p {
   transform: translateY(-5px);
   box-shadow: 0 4px 12px rgba(77, 166, 255, 0.3);
 }
-
-/* 📝 Dashboard */
-.dashboard-section {
-  background-color: #ffffff;
+/* Import font globally */
+/* Dashboard css */
+.dashboard-container {
+  background-color: #e6f2ff;
+  min-height: 100vh;   /* full screen height */
+  width: 100vw;        /* full screen width */
 }
 
-.dashboard-section h2 {
-  color: #0056b3;
+.sidebar {
+  width: 220px;
+  background-color: #cce6ff;
+  border-right: 2px solid #99ccff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.dashboard-section .card {
-  background-color: #f8fbff;
+.sidebar-bottom {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid #99ccff;
 }
 
-.dashboard-section .card-title {
-  color: #0056b3;
+.sidebar .nav-link {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 10px;
+  color: #003366;
+  cursor: pointer;
+  width: 100%;
 }
 
-/* 📄 About & Contact */
+.sidebar .nav-link.active {
+  background-color: #99ccff;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.back-home {
+  background-color: #3399ff;
+  color: white;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.back-home:hover {
+  background-color: #007acc;
+}
+
+.dashboard-title {
+  color: #004080;
+  margin-bottom: 1rem;
+}
+
+.dashboard-card {
+  background-color: #cce6ff;
+  border: 1px solid #99ccff;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 0.5rem;
+  color: #003366;
+}
+
+.task-list .completed {
+  background-color: #b3e6ff;
+}
+
+.task-list .pending {
+  background-color: #ffe6e6;
+}
+
+.add-task-form {
+  background: #f0f8ff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #99ccff;
+}
+
+.add-task-form .form-label {
+  color: #003366;
+  font-weight: 600;
+}
+
+.add-task-form input {
+  border: 1px solid #99ccff;
+}
+
+.add-task-form button {
+  background-color: #3399ff;
+  border: none;
+  font-weight: bold;
+}
+
+.add-task-form button:hover {
+  background-color: #007acc;
+}
+/* 📄 About & Contact */ */
 .about-section, .contact-section {
   background-color: #e6f2ff;
 }
@@ -164,6 +247,15 @@ p {
 .footer a:hover {
   text-decoration: underline;
   color: #ffffff;
+}
+
+container>.align-item:center{
+  justify-content: space-between;
+  margin-top: 5%
+} 
+.col-md-6{
+  width: 40%;
+  margin-left: 7.5%
 }
 
 /* 📱 Responsive Tweaks */
